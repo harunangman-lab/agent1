@@ -1,6 +1,7 @@
 import { FORMATS, exportText } from './generator.js';
 import { prepareInput, templateDraft } from './content-policy.js';
 import { initPhotoStudio } from './photo-studio.js';
+import { initListingImport } from './listing-import.js';
 
 const $=selector=>document.querySelector(selector);
 const form=$('#property-form');
@@ -88,3 +89,4 @@ $('#close-copy').addEventListener('click',()=>$('#copy-dialog').close());$('#sel
 $('#download').addEventListener('click',()=>{if(!currentDraft)return;const blob=new Blob(['\uFEFF',exportText(currentDraft)],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`매물홍보_${currentDraft.mode}_${FORMATS[currentDraft.format].replaceAll(' ','_')}_${new Date().toLocaleDateString('sv-SE')}.txt`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);toast('현재 수정본의 TXT 다운로드를 시작했어요.');});
 syncTransaction();loadConfig();
 initPhotoStudio({getProperty:readInput,toast});
+initListingImport({form,toast,isGenerating:()=>busy,onApply:()=>{example=false;$('#example-banner').hidden=true;$('#form-error').hidden=true;syncTransaction();showDraft();form.dispatchEvent(new Event('propertychange'));}});

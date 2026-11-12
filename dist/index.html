@@ -9,6 +9,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%231c3c35'/%3E%3Cpath d='M10 20 20 11 30 20v11H10Z' fill='none' stroke='%23ddf2a1' stroke-width='3'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./styles.css">
   <link rel="stylesheet" href="./photo-studio.css">
+  <link rel="stylesheet" href="./listing-import.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
@@ -20,6 +21,16 @@
     <section class="intro">
       <div><div class="eyebrow">중개사의 시간을, 고객에게.</div><h1>매물의 정보를<br class="mobile-break"> <span>좋은 소개로.</span></h1><p>매물 정보만 입력하면 홍보 콘텐츠 초안 완성</p></div>
       <div class="intro-note"><span class="note-star" aria-hidden="true">✳</span><div>빈 화면 앞에서 고민하는 시간 대신,<br>확인한 정보를 차분히 담아보세요.</div></div>
+    </section>
+    <section class="panel listing-import" aria-labelledby="import-title">
+      <div class="panel-heading"><div><span class="step">QUICK START / IMPORT</span><h2 id="import-title">등록된 매물 정보, 다시 쓰지 마세요</h2><p class="help">엑셀 또는 등록 화면 캡처 → 내용 확인·수정 → 매물 입력란에 적용</p></div><span class="template-badge">확인 후 적용</span></div>
+      <div class="import-options">
+        <section><h3>▦ 엑셀에서 가져오기</h3><p class="help">XLSX · XLS · CSV / 최대 5MB<br>앞 20개 시트 · 시트별 1,000행 · 100열까지 읽습니다.<br>파일은 서버에 보내지 않고 브라우저에서만 읽습니다.</p><label class="button secondary import-file-label">엑셀 파일 선택<input id="listing-excel" type="file" accept=".xlsx,.xls,.csv"></label><button id="import-sample" class="button small secondary" type="button">CSV 양식 받기</button></section>
+        <section><h3>▧ 등록 화면 캡처에서 가져오기</h3><p class="help">동일한 매물의 JPG · PNG · WebP, 최대 3장 · 장당 5MB<br>사진 속 글자를 AI로 읽습니다. 고객·소유자 개인정보는 가린 캡처를 사용하세요. 다른 사이트에 로그인하거나 자동 수집하지 않습니다.</p><label class="button secondary import-file-label">캡처 파일 선택<input id="listing-captures" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple></label><div id="capture-previews" class="capture-previews"></div><label class="checkbox-label"><input id="capture-consent" type="checkbox"><span>캡처를 AI 인식용으로 OpenAI에 전송하는 데 동의합니다.</span></label><button id="read-captures" class="button secondary" type="button">캡처 정보 읽기</button><p class="help">기존 AI 서버 설정을 사용합니다. 인식용으로 크기를 줄여 전송하며, 서버에 파일을 저장하지 않습니다. 홍보 카드용 사진에는 자동 추가하지 않습니다.</p></section>
+      </div>
+      <p id="import-status" class="help" role="status" aria-live="polite"></p><p id="import-error" class="form-error" role="alert" hidden></p>
+      <div id="excel-mapping" hidden><div class="field-grid"><label>시트 선택<select id="import-sheet"></select></label><label>열 제목이 있는 행<select id="import-header"></select></label></div><p class="help">자동 연결된 열을 확인하세요. 가격 단위가 제목에 있으면 금액에 붙입니다. 공급면적·평은 전용면적에 자동 연결하지 않습니다.</p><div id="import-columns" class="import-columns"></div><label>가져올 매물<select id="import-row"></select></label><button id="review-excel" class="button secondary" type="button">선택한 매물 확인하기</button></div>
+      <div id="import-review" hidden><div class="dialog-heading"><div><h3>가져온 내용 확인</h3><p id="import-source" class="help"></p></div><button id="cancel-import" class="button small secondary" type="button">닫기</button></div><p class="help">적용할 항목을 선택하고 수정하세요. 적용하면 기존 매물 정보는 교체됩니다. 선택하지 않은 항목은 비워집니다. 사무소·홍보용 연락처·문체와 업로드한 사진은 유지되므로 같은 매물인지 확인하세요.</p><ul id="import-notes" class="help"></ul><div id="import-fields" class="import-fields"></div><label class="checkbox-label"><input id="confirm-import-features" type="checkbox"><span>선택한 특징·장점을 직접 확인했습니다. 미선택 시 검토 항목으로만 옮깁니다.</span></label><label class="checkbox-label"><input id="confirm-import" type="checkbox"><span>가격 단위·전용면적·매물 유형·거래 유형을 원자료와 대조했습니다.</span></label><button id="apply-import" class="button primary" type="button">확인한 정보를 입력란에 적용</button><p class="help">상세 주소와 연락처는 적용 시 비공개로 설정됩니다. 공개하려면 입력란에서 다시 선택해주세요.</p></div>
     </section>
     <div class="workspace">
       <section class="panel input-panel" aria-labelledby="input-title">
