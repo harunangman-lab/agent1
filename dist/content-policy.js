@@ -17,6 +17,7 @@ export function prepareInput(raw) {
     if (selected[key].length > (LIMITS[key] || 100)) throw new Error(`${FIELDS[key] || '입력'} 내용이 너무 깁니다.`);
   }
   selected.publishAddress = raw.publishAddress === true;
+  selected.publishContact = raw.publishContact !== false;
   selected.example = raw.example === true;
   const data = normalize(selected);
   const excluded = [];

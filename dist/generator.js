@@ -20,6 +20,8 @@ export function publicRegion(value) {
 export function normalize(raw) {
   const data = Object.fromEntries(Object.entries(raw).map(([key, value]) => [key, typeof value === 'boolean' ? value : clean(value)]));
   data.publishAddress = raw.publishAddress === true;
+  data.publishContact = raw.publishContact !== false;
+  if (!data.publishContact) data.contact = '';
   data.propertyType = ['아파트','빌라','오피스텔','원룸','상가','사무실','토지'].includes(data.propertyType) ? data.propertyType : '아파트';
   data.transaction = ['매매','전세','월세'].includes(data.transaction) ? data.transaction : '매매';
   data.region = publicRegion(data.region);

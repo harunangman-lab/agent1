@@ -1,5 +1,6 @@
 import { FORMATS, exportText } from './generator.js';
 import { prepareInput, templateDraft } from './content-policy.js';
+import { initPhotoStudio } from './photo-studio.js';
 
 const $=selector=>document.querySelector(selector);
 const form=$('#property-form');
@@ -10,7 +11,7 @@ let configured=false, serverKnown=false, lastAttempt=null;
 const key=()=>`${mode}:${format}`;
 
 function toast(message){clearTimeout(toastTimer);$('#toast').textContent=message;$('#toast').hidden=false;toastTimer=setTimeout(()=>{$('#toast').hidden=true;},3500);}
-function readInput(){const raw={...Object.fromEntries(new FormData(form)),publishAddress:form.elements.publishAddress.checked,example};delete raw.mode;return raw;}
+function readInput(){const entries=[...form.elements].filter(el=>el.name&&el.type!=='checkbox'&&(el.type!=='radio'||el.checked)).map(el=>[el.name,el.value]);const raw={...Object.fromEntries(entries),publishAddress:form.elements.publishAddress.checked,publishContact:form.elements.publishContact.checked,example};delete raw.mode;return raw;}
 function fingerprint(){return JSON.stringify(readInput());}
 function syncTransaction(){const t=form.elements.transaction.value;for(const [id,name,enabled]of [['sale-field','salePrice',t==='매매'],['deposit-field','deposit',t!=='매매'],['rent-field','rent',t==='월세']]){$(`#${id}`).hidden=!enabled;form.elements[name].disabled=busy||!enabled;}}
 function configLabel(){ $('#ai-status').textContent=serverKnown?(configured?'AI 서버 설정 완료 · 실제 연결·사용 권한은 생성 시 확인합니다.':'AI 미설정 · 서버의 OPENAI_API_KEY를 설정해주세요. 템플릿은 바로 사용할 수 있어요.'):'AI 서버에 연결할 수 없습니다. 템플릿은 계속 사용할 수 있어요.';$('#ai-privacy').hidden=mode!=='ai'; }
@@ -77,6 +78,7 @@ $('#example').addEventListener('click',()=>{
   const sample={propertyType:'아파트',transaction:'전세',region:'서울 마포구 연남동',exactAddress:'가상로 12, 예시동 302호',deposit:'3억 5,000만원',area:'59.8',floor:'3층 / 총 5층',direction:'남향',moveIn:'2027년 2월 협의',maintenance:'월 12만원, 수도 별도',parking:'세대당 1대 가능',features:'거실 남향\n주방 창문 있음\n거실과 방 2개 구조',checks:'관리비 포함 항목 재확인\n입주 가능일 최종 협의',office:'한빛공인중개사사무소 (가상)',contact:'02-000-0000'};
   for(const [name,value]of Object.entries(sample))form.elements[name].value=value;
   example=true;$('#example-banner').hidden=false;$('#form-error').hidden=true;$('#retry').hidden=true;syncTransaction();showDraft();toast('가상 예시를 입력했어요. 만들기 버튼을 눌러보세요.');
+  form.dispatchEvent(new Event('propertychange'));
 });
 for(const [id,field]of [['result-title','title'],['result-text','body'],['result-cta','cta']])$(`#${id}`).addEventListener('input',()=>{if(!currentDraft)return;currentDraft[field]=$(`#${id}`).value;currentDraft.edited=true;$('#edited-badge').hidden=false;$('#mode-badge').textContent=`${currentDraft.mode==='ai'?'AI 생성 초안':'템플릿 초안'} · 수정본`;});
 $('#regenerate').addEventListener('click',()=>generate({next:true}));
@@ -85,3 +87,4 @@ $('#copy').addEventListener('click',async()=>{if(!currentDraft)return;const text
 $('#close-copy').addEventListener('click',()=>$('#copy-dialog').close());$('#select-copy').addEventListener('click',()=>{$('#copy-text').focus();$('#copy-text').select();});
 $('#download').addEventListener('click',()=>{if(!currentDraft)return;const blob=new Blob(['\uFEFF',exportText(currentDraft)],{type:'text/plain;charset=utf-8'});const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`매물홍보_${currentDraft.mode}_${FORMATS[currentDraft.format].replaceAll(' ','_')}_${new Date().toLocaleDateString('sv-SE')}.txt`;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),10000);toast('현재 수정본의 TXT 다운로드를 시작했어요.');});
 syncTransaction();loadConfig();
+initPhotoStudio({getProperty:readInput,toast});

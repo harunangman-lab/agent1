@@ -8,6 +8,7 @@
   <title>매물 홍보 비서 · 나의 콘텐츠 작업실</title>
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%231c3c35'/%3E%3Cpath d='M10 20 20 11 30 20v11H10Z' fill='none' stroke='%23ddf2a1' stroke-width='3'/%3E%3C/svg%3E">
   <link rel="stylesheet" href="./styles.css">
+  <link rel="stylesheet" href="./photo-studio.css">
   <script type="module" src="./app.js"></script>
 </head>
 <body>
@@ -55,6 +56,7 @@
           </fieldset>
           <fieldset><legend><span class="section-number">03</span>사무소와 문체</legend>
             <div class="field-grid"><label>사무소 이름<input name="office" maxlength="80" placeholder="예: 한빛공인중개사사무소"></label><label>홍보용 연락처<input name="contact" type="tel" maxlength="60" placeholder="예: 02-000-0000"></label></div>
+            <label class="checkbox-label contact-public"><input type="checkbox" name="publishContact" checked><span>홍보용 연락처를 문구와 카드에 공개합니다</span></label>
             <span class="field-label tone-label" id="tone-label">문체 선택</span>
             <div class="tone-options" role="radiogroup" aria-labelledby="tone-label"><label><input type="radio" name="tone" value="polite" checked><span>정중하게</span></label><label><input type="radio" name="tone" value="friendly"><span>친근하게</span></label><label><input type="radio" name="tone" value="concise"><span>간결하게</span></label></div>
           </fieldset>
@@ -74,12 +76,34 @@
           <div class="output-actions"><button type="button" class="button secondary" id="copy" disabled><span aria-hidden="true">▢</span> 복사</button><button type="button" class="button secondary" id="download" disabled><span aria-hidden="true">↓</span> TXT 다운로드</button><button type="button" class="button text-button" id="regenerate" disabled><span aria-hidden="true">↻</span> 다시 작성</button></div>
         </div>
         <aside class="review-box"><span class="review-icon" aria-hidden="true">✓</span><div><h3>게시 전, 한 번 더 확인해주세요.</h3><p>입력된 사실을 바탕으로 한 초안입니다. 가격·면적·입주 조건과 필요한 표시 사항을 확인한 뒤 사용해주세요.</p><div id="pending-checks" hidden><strong>추가 확인 사항 · 홍보 본문에 포함되지 않음</strong><p id="checks-text"></p></div></div></aside>
-        <div class="coming-next"><div class="coming-icon" aria-hidden="true">▧</div><div><strong>다음은, 사진과 영상까지.</strong><p>사진 업로드 · 홍보 카드 · 영상 제작으로 확장할 예정이에요.</p></div><span class="coming-label">준비 중</span></div>
+        <a class="studio-shortcut" href="#photo-studio"><span aria-hidden="true">▧</span><div><strong>사진으로 홍보 카드 만들기</strong><p>사진을 올리고 정사각형·세로형 PNG로 완성하세요.</p></div><span aria-hidden="true">↓</span></a>
       </section>
     </div>
-    <footer class="footer"><span>매물 홍보 비서 <span class="footer-dot">·</span> 나의 콘텐츠 작업실</span><span>템플릿은 브라우저에서, AI 생성은 서버에서 처리합니다.</span></footer>
+    <section id="photo-studio" class="photo-studio" aria-labelledby="studio-title">
+      <div class="studio-heading"><div><span class="step">03 / PHOTO STUDIO</span><h2 id="studio-title">사진으로 완성하는, 매물 홍보 카드</h2><p>촬영한 모습은 그대로. 필요한 부분만 정돈해 소개하세요.</p></div><span class="template-badge">사진은 내 브라우저에서만 처리</span></div>
+      <div class="studio-grid">
+        <section class="panel photo-library" aria-labelledby="library-title"><div class="panel-heading"><div><h3 id="library-title">매물 사진</h3><p class="help" id="photo-count">0 / 10장</p></div><button class="button secondary" type="button" id="add-photos">＋ 사진 추가</button></div>
+          <input id="photo-files" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" multiple hidden>
+          <div id="photo-drop" class="photo-drop" tabindex="0" role="button" aria-label="사진 선택 또는 끌어다 놓기"><span aria-hidden="true">↥</span><strong>사진을 끌어 놓거나 선택하세요</strong><p>JPG · PNG · WebP / 장당 최대 10MB<br>최대 10장 · 전체 최대 50MB</p><small>원본은 유지되며, 편집본만 따로 만듭니다.<br>이 탭을 닫거나 새로고침하면 사진은 사라집니다.</small></div>
+          <p class="photo-status" id="photo-status" role="status" aria-live="polite"></p>
+          <ul id="photo-errors" class="photo-errors" role="alert" hidden></ul>
+          <div id="photo-list" class="photo-list"></div>
+        </section>
+        <section class="panel card-workbench" aria-labelledby="card-title"><div class="panel-heading"><div><h3 id="card-title">홍보 카드 제작</h3><p class="help">현재 입력한 매물 정보와 대표 사진을 사용합니다.</p></div></div>
+          <div class="card-controls"><label>카드 크기<select id="card-size"><option value="square">정사각형 · 1080 × 1080</option><option value="portrait">세로형 · 1080 × 1350</option></select></label><button id="make-card" class="button primary" type="button">홍보 카드 만들기 <span aria-hidden="true">✧</span></button></div>
+          <div class="card-empty" id="card-empty"><span aria-hidden="true">▧</span><p>실제 매물 사진을 올리고<br>‘홍보 카드 만들기’를 눌러주세요.</p></div>
+          <div id="card-edit-fields" class="card-edit-fields" hidden><div class="field-grid"><label class="span-2">카드 제목<input id="card-headline" maxlength="120"></label><label>가격 문구<input id="card-price" maxlength="80"></label><label>면적 문구<input id="card-area" maxlength="50"></label><label class="span-2">확인된 특징 · 카드 문구<textarea id="card-features" rows="3" maxlength="600"></textarea></label></div><p class="help">사무소·연락처·주소 공개 여부는 위 매물 입력의 설정을 따릅니다. 긴 글은 자동 축소되며, 공간이 부족하면 다운로드를 멈춥니다.</p></div>
+          <div id="card-stale" class="stale-message" hidden>매물 정보가 변경되었습니다. ‘홍보 카드 만들기’로 정보를 다시 반영해주세요.</div>
+          <p id="card-error" class="form-error" role="alert" hidden></p>
+          <div id="card-preview-wrap" class="card-preview-wrap" hidden><img id="card-preview-image" width="1080" height="1080" alt="다운로드할 홍보 카드 미리보기"></div>
+          <div class="card-footer"><span id="card-dimensions" class="help">미리보기와 동일한 PNG를 저장합니다.</span><button id="download-card" class="button secondary" type="button" disabled>↓ PNG 다운로드</button></div>
+        </section>
+      </div>
+    </section>
+    <footer class="footer"><span>매물 홍보 비서 <span class="footer-dot">·</span> 나의 콘텐츠 작업실</span><span>사진·카드는 브라우저에서, AI 문구는 서버에서 처리합니다.</span></footer>
   </main>
   <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
   <dialog id="copy-dialog"><div class="dialog-heading"><h2>문구 복사</h2><button type="button" id="close-copy" class="button secondary" aria-label="닫기">✕</button></div><p>브라우저에서 자동 복사를 허용하지 않았습니다. 아래 문구를 선택해 복사해주세요.</p><textarea id="copy-text" readonly aria-label="수동 복사할 홍보 문구"></textarea><button type="button" class="button primary" id="select-copy">전체 선택</button></dialog>
+  <dialog id="photo-editor" class="photo-editor"><div class="dialog-heading"><div><span class="step">PHOTO EDIT</span><h2>사진 자르기·보정</h2></div><button id="close-photo-editor" type="button" class="button secondary" aria-label="사진 편집 닫기">✕</button></div><p id="editing-photo-name"></p><div class="crop-preview"><canvas id="crop-canvas" width="800" height="450" aria-label="사진 자르기와 밝기 미리보기"></canvas></div><div class="edit-settings"><label>자르기 비율<select id="crop-ratio"><option value="landscape">가로 · 16:9</option><option value="standard">가로 · 4:3</option><option value="square">정사각형 · 1:1</option><option value="original">원본 비율</option></select></label><div class="rotation-buttons"><button id="rotate-left" type="button" class="button secondary">↶ 왼쪽 회전</button><button id="rotate-right" type="button" class="button secondary">↷ 오른쪽 회전</button></div><label>확대하여 자르기 <output id="zoom-value">1.00×</output><input id="crop-zoom" type="range" min="1" max="3" step="0.05" value="1"></label><label>자르기 위치 · 좌우<input id="crop-x" type="range" min="0" max="100" step="1" value="50"></label><label>자르기 위치 · 상하<input id="crop-y" type="range" min="0" max="100" step="1" value="50"></label><label>밝기 <output id="brightness-value">100%</output><input id="photo-brightness" type="range" min="50" max="150" step="1" value="100"></label></div><p class="help">원본을 덮어쓰지 않습니다. 구조·시설·하자 등을 바꾸는 생성 편집은 제공하지 않습니다.</p><p id="photo-edit-error" class="form-error" role="alert" hidden></p><div class="photo-editor-actions"><button id="reset-photo-edit" class="button secondary" type="button">편집 초기화</button><button id="save-photo-edit" class="button primary" type="button">편집 적용</button></div></dialog>
 </body>
 </html>
