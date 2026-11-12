@@ -91,5 +91,6 @@ export function generateDraft(raw, format = 'blog', variant = 0) {
 }
 
 export function exportText(draft) {
-  return `템플릿 초안 · ${FORMATS[draft.format]}\n\n${draft.title}\n\n${draft.body}\n\n${draft.note}`;
+  const label=draft.mode==='ai'?'AI 생성 초안':'템플릿 초안';
+  return [`${label}${draft.edited?' · 사용자 수정본':''} · ${FORMATS[draft.format]}`,draft.title,draft.body,draft.cta,draft.hashtags?.join(' '),draft.note].filter(Boolean).join('\n\n');
 }
