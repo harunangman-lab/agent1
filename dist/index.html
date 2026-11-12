@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="입력한 매물 정보로 블로그, SNS, 카드 문구와 세로 영상 대본을 만드는 매물 홍보 비서">
+  <meta name="theme-color" content="#1c3c35">
+  <title>매물 홍보 비서 · 나의 콘텐츠 작업실</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='12' fill='%231c3c35'/%3E%3Cpath d='M10 20 20 11 30 20v11H10Z' fill='none' stroke='%23ddf2a1' stroke-width='3'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="./styles.css">
+  <script type="module" src="./app.js"></script>
+</head>
+<body>
+  <header class="header"><div class="header-inner">
+    <a class="brand" href="./" aria-label="매물 홍보 비서 홈"><span class="brand-icon" aria-hidden="true">⌂</span><span>매물 홍보 비서<span class="brand-sub">PROPERTY CONTENT STUDIO</span></span></a>
+    <span class="local-badge"><span class="status-dot"></span>가입 없이 바로 시작</span>
+  </div></header>
+  <main class="shell">
+    <section class="intro">
+      <div><div class="eyebrow">중개사의 시간을, 고객에게.</div><h1>매물의 정보를<br class="mobile-break"> <span>좋은 소개로.</span></h1><p>매물 정보만 입력하면 홍보 콘텐츠 초안 완성</p></div>
+      <div class="intro-note"><span class="note-star" aria-hidden="true">✳</span><div>빈 화면 앞에서 고민하는 시간 대신,<br>확인한 정보를 차분히 담아보세요.</div></div>
+    </section>
+    <div class="workspace">
+      <section class="panel input-panel" aria-labelledby="input-title">
+        <div class="panel-heading"><div><span class="step">01 / INPUT</span><h2 id="input-title">매물 정보 입력</h2></div><button type="button" class="button small secondary" id="example">가상 예시 채우기 <span aria-hidden="true">↗</span></button></div>
+        <div class="example-banner" id="example-banner" hidden>가상 예시가 입력되었습니다. 실제 매물 정보가 아닙니다.</div>
+        <form id="property-form">
+          <fieldset><legend><span class="section-number">01</span>기본 정보</legend>
+            <div class="field-grid">
+              <label>매물 유형<select name="propertyType"><option>아파트</option><option>빌라</option><option>오피스텔</option><option>원룸</option><option>상가</option><option>사무실</option><option>토지</option></select></label>
+              <label>거래 유형<select name="transaction"><option>매매</option><option>전세</option><option>월세</option></select></label>
+              <label class="span-2">공개할 지역<span class="label-hint">동·지역 단위</span><input name="region" maxlength="100" placeholder="예: 서울 마포구 연남동" aria-describedby="region-help"><span class="help" id="region-help">도로명·건물번호·호수는 아래 비공개 주소란에 입력하세요.</span></label>
+            </div>
+            <details class="address-settings"><summary><span aria-hidden="true">⌑</span> 정확한 주소·호수 공개 설정 <span class="private-pill">기본 비공개</span></summary>
+              <label>상세 주소·호수<input name="exactAddress" maxlength="180" placeholder="도로명, 건물번호, 동·호수 등"></label>
+              <label class="checkbox-label"><input type="checkbox" name="publishAddress"><span>정확한 주소·호수를 결과에 공개합니다</span></label>
+              <p class="help">선택하지 않으면 이 주소는 어떤 결과에도 포함하지 않습니다.</p>
+            </details>
+            <div class="field-grid price-fields">
+              <label id="sale-field">매매가<span class="input-wrap"><input name="salePrice" maxlength="40" placeholder="예: 8억 5,000만원"></span></label>
+              <label id="deposit-field" hidden>보증금<input name="deposit" maxlength="40" placeholder="예: 3억원"></label>
+              <label id="rent-field" hidden>월세<input name="rent" maxlength="40" placeholder="예: 80만원"></label>
+              <label>전용면적<span class="input-wrap"><input name="area" type="number" min="0.01" max="100000000" step="0.01" placeholder="84.9"><span class="unit">㎡</span></span></label>
+              <label>층<input name="floor" maxlength="30" placeholder="예: 5층 / 총 12층"></label>
+              <label>방향<select name="direction"><option value="">선택 안 함</option><option>남향</option><option>남동향</option><option>남서향</option><option>동향</option><option>서향</option><option>북향</option><option>북동향</option><option>북서향</option></select></label>
+              <label>입주 가능 시기<input name="moveIn" maxlength="60" placeholder="예: 2027년 2월 협의"></label>
+              <label>관리비<input name="maintenance" maxlength="80" placeholder="예: 월 15만원, 수도 별도"></label>
+              <label class="span-2">주차 정보<input name="parking" maxlength="100" placeholder="예: 세대당 1대 가능"></label>
+            </div>
+          </fieldset>
+          <fieldset><legend><span class="section-number">02</span>소개할 포인트</legend>
+            <label>확인된 특징과 장점<textarea name="features" rows="3" maxlength="1500" placeholder="직접 확인한 내용을 한 줄씩 적어주세요.&#10;예: 거실 남향 / 주방 창문 있음"></textarea></label>
+            <label>추가 확인이 필요한 사항<span class="label-hint">홍보 본문에서 제외</span><textarea name="checks" rows="2" maxlength="1000" placeholder="예: 입주일 재확인, 관리비 포함 항목 확인"></textarea></label>
+          </fieldset>
+          <fieldset><legend><span class="section-number">03</span>사무소와 문체</legend>
+            <div class="field-grid"><label>사무소 이름<input name="office" maxlength="80" placeholder="예: 한빛공인중개사사무소"></label><label>홍보용 연락처<input name="contact" type="tel" maxlength="60" placeholder="예: 02-000-0000"></label></div>
+            <span class="field-label tone-label" id="tone-label">문체 선택</span>
+            <div class="tone-options" role="radiogroup" aria-labelledby="tone-label"><label><input type="radio" name="tone" value="polite" checked><span>정중하게</span></label><label><input type="radio" name="tone" value="friendly"><span>친근하게</span></label><label><input type="radio" name="tone" value="concise"><span>간결하게</span></label></div>
+          </fieldset>
+          <p id="form-error" class="form-error" role="alert" hidden></p>
+          <div class="form-footer"><span class="help">입력한 내용은 현재 탭에서만 사용됩니다.</span><button class="button primary generate" type="submit"><span aria-hidden="true">✧</span> 홍보 문구 만들기 <span aria-hidden="true">→</span></button></div>
+        </form>
+      </section>
+      <section class="output-column" aria-labelledby="output-title">
+        <div class="panel output-panel">
+          <div class="panel-heading"><div><span class="step">02 / OUTPUT</span><h2 id="output-title">나의 홍보 콘텐츠</h2></div><span class="template-badge">템플릿 초안</span></div>
+          <div class="format-tabs" role="tablist" aria-label="콘텐츠 유형"><button type="button" role="tab" aria-selected="true" aria-controls="output-body" id="tab-blog" data-format="blog"><span aria-hidden="true">▤</span> 블로그</button><button type="button" role="tab" aria-selected="false" aria-controls="output-body" id="tab-sns" tabindex="-1" data-format="sns"><span aria-hidden="true">#</span> SNS</button><button type="button" role="tab" aria-selected="false" aria-controls="output-body" id="tab-card" tabindex="-1" data-format="card"><span aria-hidden="true">▣</span> 소개 카드</button><button type="button" role="tab" aria-selected="false" aria-controls="output-body" id="tab-video" tabindex="-1" data-format="video"><span aria-hidden="true">▷</span> 영상 대본</button></div>
+          <div id="output-body" role="tabpanel" aria-labelledby="tab-blog">
+            <div class="empty-state" id="empty-state"><div class="paper-illustration" aria-hidden="true"><span class="paper-house">⌂</span><span class="paper-line"></span><span class="paper-line short"></span><span class="paper-line"></span><span class="paper-spark">✧</span><span class="paper-label">FOR YOUR PROPERTY</span></div><h3>좋은 소개는, 정확한 정보에서.</h3><p>왼쪽에 매물 정보를 입력해주세요.<br>선택한 채널에 맞는 초안을 만들어드릴게요.</p><span class="empty-hint">처음이라면 ‘가상 예시 채우기’로 시작해보세요.</span></div>
+            <div id="result" class="result" hidden><div class="result-meta"><span id="result-format"></span><span id="result-example" class="example-tag" hidden>가상 예시</span></div><span class="result-label">제목</span><h3 id="result-title"></h3><div class="result-divider"></div><span class="result-label">본문</span><div id="result-text" class="result-text"></div><div id="stale-message" class="stale-message" hidden>입력 정보가 변경되었습니다. ‘홍보 문구 만들기’를 눌러 새 정보를 반영하세요.</div></div>
+          </div>
+          <div class="output-actions"><button type="button" class="button secondary" id="copy" disabled><span aria-hidden="true">▢</span> 복사</button><button type="button" class="button secondary" id="download" disabled><span aria-hidden="true">↓</span> TXT 다운로드</button><button type="button" class="button text-button" id="regenerate" disabled><span aria-hidden="true">↻</span> 다시 작성</button></div>
+        </div>
+        <aside class="review-box"><span class="review-icon" aria-hidden="true">✓</span><div><h3>게시 전, 한 번 더 확인해주세요.</h3><p>입력된 사실을 바탕으로 한 초안입니다. 가격·면적·입주 조건과 필요한 표시 사항을 확인한 뒤 사용해주세요.</p><div id="pending-checks" hidden><strong>추가 확인 사항 · 홍보 본문에 포함되지 않음</strong><p id="checks-text"></p></div></div></aside>
+        <div class="coming-next"><div class="coming-icon" aria-hidden="true">▧</div><div><strong>다음은, 사진과 영상까지.</strong><p>사진 업로드 · 홍보 카드 · 영상 제작으로 확장할 예정이에요.</p></div><span class="coming-label">준비 중</span></div>
+      </section>
+    </div>
+    <footer class="footer"><span>매물 홍보 비서 <span class="footer-dot">·</span> 나의 콘텐츠 작업실</span><span>외부 AI 호출 없이, 입력한 정보만 사용합니다.</span></footer>
+  </main>
+  <div class="toast" id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="copy-dialog"><div class="dialog-heading"><h2>문구 복사</h2><button type="button" id="close-copy" class="button secondary" aria-label="닫기">✕</button></div><p>브라우저에서 자동 복사를 허용하지 않았습니다. 아래 문구를 선택해 복사해주세요.</p><textarea id="copy-text" readonly aria-label="수동 복사할 홍보 문구"></textarea><button type="button" class="button primary" id="select-copy">전체 선택</button></dialog>
+</body>
+</html>
